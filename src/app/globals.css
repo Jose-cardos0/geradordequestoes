@@ -369,3 +369,60 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/*INPUT*/
+
+/* From Uiverse.io by tiagoadag1203 */
+.input {
+  background-color: #1a1a1a;
+  border: none;
+  padding: 6px;
+  border-radius: 1px;
+  outline: none;
+  color: white;
+}
+
+.input:focus {
+  animation: rotateShadow 2s infinite linear;
+}
+
+.animateShadow {
+  box-shadow: 2px 2px 5px #aa00ff, -2px -2px 5px black;
+  animation: aniShadow 1s infinite linear;
+}
+
+@keyframes aniShadow {
+  0% {
+    box-shadow: 5px 5px 150px #aa00ff, -5px -5px 150px black;
+  }
+  25% {
+    box-shadow: -5px 5px 150px #aa00ff, 5px -5px 150px black;
+  }
+  50% {
+    box-shadow: -5px -5px 150px #aa00ff, 5px 5px 150px black;
+  }
+  75% {
+    box-shadow: 5px -5px 150px #aa00ff, -5px 5px 150px black;
+  }
+  100% {
+    box-shadow: 5px 5px 150px #aa00ff, -5px -5px 150px black;
+  }
+}
+
+@keyframes rotateShadow {
+  0% {
+    box-shadow: -2px -2px 0px 0px #aa00ff, 2px 2px 0px 0px #ffa600;
+  }
+  25% {
+    box-shadow: -2px 2px 0px 0px #aa00ff, 2px -2px 0px 0px #ffa600;
+  }
+  50% {
+    box-shadow: 2px 2px 0px 0px #aa00ff, -2px -2px 0px 0px #ffa600;
+  }
+  75% {
+    box-shadow: 2px -2px 0px 0px #aa00ff, -2px 2px 0px 0px #ffa600;
+  }
+  100% {
+    box-shadow: -2px -2px 0px 0px #aa00ff, 2px 2px 0px 0px #ffa600;
+  }
+}

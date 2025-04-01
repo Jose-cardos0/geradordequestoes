@@ -23,7 +23,6 @@ export default function Home() {
     >
       <div className="px-4">
         <section
-          id="loading"
           className=" 
            flex items-center "
         >
