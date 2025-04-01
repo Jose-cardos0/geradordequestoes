@@ -387,25 +387,25 @@ body {
 }
 
 .animateShadow {
-  box-shadow: 2px 2px 5px #aa00ff, -2px -2px 5px black;
-  animation: aniShadow 1s infinite linear;
+  box-shadow: 2px 2px 5px #aa00ff, -2px -2px 5px #ffa600;
+  animation: aniShadow 3s infinite linear;
 }
 
 @keyframes aniShadow {
   0% {
-    box-shadow: 5px 5px 150px #aa00ff, -5px -5px 150px black;
+    box-shadow: 5px 5px 1px #aa00ff, -5px -5px 1px #ffa600;
   }
   25% {
-    box-shadow: -5px 5px 150px #aa00ff, 5px -5px 150px black;
+    box-shadow: -5px 5px 1px #aa00ff, 5px -5px 1px #ffa600;
   }
   50% {
-    box-shadow: -5px -5px 150px #aa00ff, 5px 5px 150px black;
+    box-shadow: -5px -5px 1px #aa00ff, 5px 5px 1px #ffa600;
   }
   75% {
-    box-shadow: 5px -5px 150px #aa00ff, -5px 5px 150px black;
+    box-shadow: 5px -5px 1px #aa00ff, -5px 5px 1px #ffa600;
   }
   100% {
-    box-shadow: 5px 5px 150px #aa00ff, -5px -5px 150px black;
+    box-shadow: 5px 5px 1px #aa00ff, -5px -5px 1px #ffa600;
   }
 }
 
