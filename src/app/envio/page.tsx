@@ -42,10 +42,9 @@ export default function Enviar() {
             className="block w-full text-sm text-gray-300
       file:mr-4 file:py-2 file:px-4
       file:rounded-lg file:border-0
-      bg-[#1a1a1a]
-      file:bg-[#303030] file:text-white animateShadow
-      hover:file:bg-black
-      cursor-pointer rouded-lg p-2"
+      file:bg-[#1a1a1a] file:text-white 
+     file:cursor-pointer
+      cursor-pointer rouded-lg "
           />
 
           <p className="text-xs mt-4">Selecione uma banca</p>
@@ -138,6 +137,7 @@ export default function Enviar() {
               IFS
             </option>
           </select>
+          <button className="">Enviar</button>
         </form>
       </section>
       {/*end form */}
