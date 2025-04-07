@@ -6,6 +6,10 @@ import {
 } from "@google/genai";
 dotenv.config();
 
+import * as path from "path";
+
+const media = "./media";
+
 const ai = new GoogleGenAI({
   apiKey: "AIzaSyD2DGLj6TrFyuU7rsigVe4UCIGmcKkzw-g",
 });
@@ -16,7 +20,7 @@ import { useState } from "react";
 
 export default function Enviar() {
   const [banca, setBanca] = useState("");
-  const [pdf, setPdf] = useState<File | null>(null);
+  const [pdf, setPdf] = useState<any>();
   const [nivel, setNivel] = useState("");
   const [questoes, setQuestoes] = useState("");
 
@@ -31,29 +35,24 @@ export default function Enviar() {
    elaboradas de acordo com o estilo de questões 
    anteriores da banca avaliadora ${banca}.`;
 
-  function handoeSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    const myfile = await ai.files.upload({
+      file: pdf,
+      config: { mimeType: "application/pdf" },
+    });
+
+    const part = createPartFromUri(myfile.uri ?? "", "application/pdf");
+    const userContent = createUserContent(prompt);
+
     async function main() {
-      try {
-        if (pdf instanceof File) {
-          const sendPdf = await ai.files.upload({
-            file: pdf,
-          });
-        } else {
-          console.error("O arquivo selecionado não é válido");
-        }
+      const response = await ai.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: [part, userContent],
+      });
 
-        const response = await ai.models.generateContent({
-          model: "gemini-2.0-flash",
-          contents: prompt,
-        });
-
-        setArquivo(response.text);
-        setPdf(null);
-      } catch (error) {
-        console.error(error);
-      }
+      setArquivo(response.text);
     }
 
     main();
@@ -100,7 +99,7 @@ export default function Enviar() {
        justify-center m-auto w-screen "
       >
         <form
-          onSubmit={handoeSubmit}
+          onSubmit={handleSubmit}
           className="w-1/2 px-16 max-md:px-8 max-md:w-screen"
         >
           <p className="text-xs mt-4">Selecione um arquivo em pdf</p>
@@ -108,8 +107,6 @@ export default function Enviar() {
             onChange={(e) => {
               if (e.target.files) {
                 setPdf(e.target.files[0]);
-              } else {
-                setPdf(null);
               }
             }}
             type="file"
