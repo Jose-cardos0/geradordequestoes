@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     description: "Criar questões automaticamente.",
     images: [
       {
-        url: "https://i.ibb.co/4wv9qDnw/florpng.png",
+        url: "https://i.ibb.co/v4dVpwQW/logo.png",
         width: 1200,
         height: 630,
         alt: "JS Developers",

@@ -12,7 +12,7 @@ const ai = new GoogleGenAI({
 });
 
 import dotenv from "dotenv";
-import Image from "next/image";
+// import Image from "next/image";
 import { useState } from "react";
 
 export default function Enviar() {
@@ -101,10 +101,10 @@ export default function Enviar() {
         </section>
       )}
       <section className="flex items-center ml-4 pt-4 relative ">
-        <div className="absolute z-50 -rotate-20 ">
+        {/* <div className="absolute z-50 -rotate-20 ">
           <Image src="/florpng.png" alt="Logo" width={35} height={35} />
-        </div>
-        <div className="spinner ml-11">
+        </div> */}
+        <div className="spinner ">
           <div className="universe"></div>
         </div>
         <div>
