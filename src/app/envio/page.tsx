@@ -101,7 +101,7 @@ export default function Enviar() {
         </section>
       )}
       <section className="flex items-center ml-4 pt-4 relative ">
-        <div className="absolute z-50 -rotate-20 mr-0">
+        <div className="absolute z-50 -rotate-20 ">
           <Image src="/florpng.png" alt="Logo" width={35} height={35} />
         </div>
         <div className="spinner ml-11">
@@ -294,7 +294,8 @@ export default function Enviar() {
               className="bg-gradient-to-tl to-orange-600
              via-purple-400 from-purple-800 p-2
               cursor-pointer font-bold text-white
-               rounded-2xl px-8  animateShadow"
+               bg-animate
+              rounded-2xl px-8 hover:scale-105 duration-300 transform "
             >
               Enviar
             </button>

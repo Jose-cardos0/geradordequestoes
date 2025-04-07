@@ -372,6 +372,24 @@ body {
 
 /*INPUT*/
 
+.bg-animate {
+  background-image: linear-gradient(to right, #ff9900, #ff66cc, #aa00ff);
+  background-size: 300% 100%;
+  animation: movebg 3s ease infinite;
+}
+
+@keyframes movebg {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 /* From Uiverse.io by tiagoadag1203 */
 .input {
   background-color: #1a1a1a;
