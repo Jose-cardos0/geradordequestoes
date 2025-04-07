@@ -5,6 +5,7 @@ import {
   createPartFromUri,
 } from "@google/genai";
 dotenv.config();
+import jsPDF from "jspdf";
 
 const ai = new GoogleGenAI({
   apiKey: "AIzaSyD2DGLj6TrFyuU7rsigVe4UCIGmcKkzw-g",
@@ -19,8 +20,9 @@ export default function Enviar() {
   const [pdf, setPdf] = useState<any>();
   const [nivel, setNivel] = useState("");
   const [questoes, setQuestoes] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [arquivoGerado, setArquivo] = useState<string>();
+  const [arquivoGerado, setArquivo] = useState<string | any>();
 
   const prompt = `utilize este arquivo em ${pdf} para criar
    10 questões sobre o conteúdo contido dentro do arquivo. Me retorne questões sobre o assunto. 
@@ -33,7 +35,7 @@ export default function Enviar() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
+    setLoading(true);
     const myfile = await ai.files.upload({
       file: pdf,
       config: { mimeType: "application/pdf" },
@@ -49,6 +51,25 @@ export default function Enviar() {
       });
 
       setArquivo(response.text);
+      setLoading(false);
+
+      const pdf = new jsPDF();
+      pdf.setFontSize(9);
+
+      // Adicionar o texto ao PDF em várias páginas
+      const linhas = pdf.splitTextToSize(arquivoGerado, 170); // largura máxima em pontos
+      let y = 10;
+      for (const linha of linhas) {
+        if (y > 250) {
+          pdf.addPage();
+          y = 10;
+        }
+        pdf.text(linha, 15, y);
+        y += 5;
+      }
+
+      const filename = "questões.pdf"; // Nome do arquivo PDF
+      pdf.save(filename);
     }
 
     main();
@@ -57,10 +78,28 @@ export default function Enviar() {
   console.log(arquivoGerado);
   return (
     <main
-      className="h-screen  
+      className="h-screen  relative
        bg-gradient-to-br flex flex-col 
        from-purple-900 via-black to-black"
     >
+      {loading && (
+        <section
+          id="loading"
+          className="absolute z-100
+      h-screen  w-screen 
+       bg-gradient-to-br flex flex-col items-center justify-center m-auto
+       from-purple-900 via-black to-black "
+        >
+          <div className="loader"></div>
+          <div className="loader2"></div>
+          <p className="text-xs text-white font-extralight text-center mt-4 ">
+            Aguarde... <br />
+            CORA IA está analisando
+            <br />
+            os dados.
+          </p>
+        </section>
+      )}
       <section className="flex items-center ml-4 pt-4 relative ">
         <div className="absolute z-50 -rotate-20 mr-0">
           <Image src="/florpng.png" alt="Logo" width={35} height={35} />
@@ -74,7 +113,7 @@ export default function Enviar() {
           </p>
           <p
             className=" font-bold text-lg ml-4 animate-pulse
-                    -mt-2 text-purple-700"
+            -mt-2 text-purple-700"
           >
             IA
           </p>
