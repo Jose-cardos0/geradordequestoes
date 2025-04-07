@@ -6,10 +6,6 @@ import {
 } from "@google/genai";
 dotenv.config();
 
-import * as path from "path";
-
-const media = "./media";
-
 const ai = new GoogleGenAI({
   apiKey: "AIzaSyD2DGLj6TrFyuU7rsigVe4UCIGmcKkzw-g",
 });
