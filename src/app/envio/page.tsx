@@ -22,7 +22,7 @@ export default function Enviar() {
   const [questoes, setQuestoes] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [arquivoGerado, setArquivo] = useState<string | any>();
+  // const [arquivoGerado, setArquivo] = useState<string | any>();
 
   const prompt = `utilize este arquivo em ${pdf} para criar
    10 questões sobre o conteúdo contido dentro do arquivo. Me retorne questões sobre o assunto. 
@@ -50,14 +50,16 @@ export default function Enviar() {
         contents: [part, userContent],
       });
 
-      setArquivo(response.text);
+      // setArquivo(response.text);
+      const arquivoTexto: string | any = response.text;
       setLoading(false);
+      console.log(arquivoTexto);
 
       const pdf = new jsPDF();
       pdf.setFontSize(9);
 
       // Adicionar o texto ao PDF em várias páginas
-      const linhas = pdf.splitTextToSize(arquivoGerado, 170); // largura máxima em pontos
+      const linhas = pdf.splitTextToSize(arquivoTexto, 170); // largura máxima em pontos
       let y = 10;
       for (const linha of linhas) {
         if (y > 250) {
@@ -75,7 +77,6 @@ export default function Enviar() {
     main();
   }
 
-  console.log(arquivoGerado);
   return (
     <main
       className="h-screen  relative
