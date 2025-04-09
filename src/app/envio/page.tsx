@@ -233,14 +233,14 @@ export default function Enviar() {
       cursor-pointer rouded-lg mt-2 "
             />
             <p className="text-xs mt-4">ou digite o título do assunto :</p>
-            <input
+            {/* <input
               value={pdf}
               onChange={(e) => setPdf(e.target.value)}
               placeholder="Difite o título do assunto"
               className="input outline-none
              bg-[#1a1a1a] mt-2 p-2 text-xs "
               type="text"
-            />
+            /> */}
           </div>
 
           <p className="text-xs mt-8">Selecione a difuldade</p>
