@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+// import Image from "next/image";
 import { useState } from "react";
 // import { useRouter } from "next/router";
 import Link from "next/link";
@@ -26,10 +26,10 @@ export default function Home() {
           className=" 
            flex items-center relative "
         >
-          <div className="absolute z-50 -rotate-20 mr-0">
+          {/* <div className="absolute z-50 -rotate-20 mr-0">
             <Image src="/florpng.png" alt="Logo" width={40} height={40} />
-          </div>
-          <div className="spinner ml-11">
+          </div> */}
+          <div className="spinner">
             <div className="universe"></div>
           </div>
           <div>
