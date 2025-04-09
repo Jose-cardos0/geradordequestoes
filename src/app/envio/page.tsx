@@ -23,15 +23,30 @@ export default function Enviar() {
   const [loading, setLoading] = useState(false);
   const [resultado, setResultado] = useState<boolean>(false);
   const [arquivoTexto, setArquivo] = useState<string | any>();
+  const [titulo, setTitulo] = useState<string>("");
+  const [mostrarPdf, setMostrarPdf] = useState(false);
 
-  const prompt = `utilize este arquivo em ${pdf} para criar
-   10 questões sobre o conteúdo contido dentro do arquivo. Me retorne questões sobre o assunto. 
+  const prompt = `utilize o conteúdo deste arquivo em pdf ${pdf} para criar
+    questões sobre o conteúdo contido dentro do arquivo. Me retorne questões sobre o assunto. 
    Cada questão deve ter 5 alternativas (a, b, c, d, e). 
    Quero que seja questões elaboradas de nível ${nivel}. 
    Além disso tem um limite de questões, quero apenas ${questoes} questões.
    Lembre-se, as questões devem ser 
    elaboradas de acordo com o estilo de questões 
-   anteriores da banca avaliadora ${banca}.`;
+   anteriores da banca avaliadora ${banca}. A ideia principal é utilizar você para me ajudar
+   a estudar para concursos, lembre-se de fazer algumas questões com pegadinhas e armadilhas que me façam confundir as respostas, por favor
+   seja extremamente criativo.`;
+
+  const ptomptText = `utilize este titulo: ${titulo} para criar
+   questões sobre o assunto didático referente ao assunto ${titulo}. Me retorne questões sobre o assunto. 
+  Cada questão deve ter 5 alternativas (a, b, c, d, e). 
+  Quero que seja questões elaboradas de nível ${nivel}. 
+  Além disso tem um limite de questões, quero apenas ${questoes} questões.
+  Lembre-se, as questões devem ser 
+  elaboradas de acordo com o estilo de questões 
+  anteriores da banca avaliadora ${banca}. A ideia principal é utilizar você para me ajudar
+   a estudar para concursos, lembre-se de fazer algumas questões com pegadinhas e armadilhas que me façam confundir as respostas, por favor
+   seja extremamente criativo. `;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -75,6 +90,21 @@ export default function Enviar() {
     }
 
     main();
+  }
+
+  async function mainText(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: ptomptText,
+    });
+
+    const arquivosData: string | any = response.text;
+    setArquivo(arquivosData);
+    setLoading(false);
+    setResultado(true);
   }
 
   function getPdf() {
@@ -212,37 +242,77 @@ export default function Enviar() {
        justify-center m-auto w-screen "
       >
         <form
-          onSubmit={handleSubmit}
+          onSubmit={mostrarPdf ? handleSubmit : mainText}
           className="w-1/2 px-16 max-md:px-8 max-md:w-screen"
         >
+          {/*ANEXO PDF*/}
           <div className="border p-4 rounded-lg border-[#1a1a1a]">
-            <p className="text-xs mt-4">Selecione um arquivo em pdf</p>
-            <input
-              onChange={(e) => {
-                if (e.target.files) {
-                  setPdf(e.target.files[0]);
-                }
-              }}
-              type="file"
-              accept=".pdf"
-              className="block w-full text-sm text-gray-300
+            <div>
+              <div>
+                <p className="text-xs mb-4">Selecione o tipo de arquivo:</p>
+                <label className="flex items-center">
+                  <input
+                    checked={mostrarPdf === false}
+                    onChange={(e) => {
+                      setMostrarPdf(false);
+                    }}
+                    id="texto"
+                    type="checkbox"
+                    className="input"
+                  />
+                  <p className="text-xs ml-2 ">Texto</p>
+                </label>
+              </div>
+              <div>
+                <label className="flex items-center">
+                  <input
+                    checked={mostrarPdf === true}
+                    onChange={(e) => {
+                      setMostrarPdf(true);
+                    }}
+                    id="pdf"
+                    type="checkbox"
+                    className="input"
+                  />
+                  <p className="text-xs ml-2 ">Arquivo em pdf</p>
+                </label>
+              </div>
+            </div>
+            {mostrarPdf && (
+              <div id="anexarPdf" className="">
+                <p className="text-xs mt-4">Selecione um arquivo em pdf</p>
+                <input
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      setPdf(e.target.files[0]);
+                    }
+                  }}
+                  type="file"
+                  accept=".pdf"
+                  className="block w-full text-sm text-gray-300
       file:mr-4 file:py-2 file:px-4
       file:rounded-lg file:border-0
       file:bg-[#1a1a1a] file:text-white 
      file:cursor-pointer
       cursor-pointer rouded-lg mt-2 "
-            />
-            <p className="text-xs mt-4">ou digite o título do assunto :</p>
-            {/* <input
-              value={pdf}
-              onChange={(e) => setPdf(e.target.value)}
-              placeholder="Difite o título do assunto"
-              className="input outline-none
-             bg-[#1a1a1a] mt-2 p-2 text-xs "
-              type="text"
-            /> */}
+                />
+              </div>
+            )}
+            {!mostrarPdf && (
+              <div id="anexarTitulo" className="">
+                <p className="text-xs mt-4">ou digite o título do assunto :</p>
+                <input
+                  value={titulo}
+                  onChange={(e) => setTitulo(e.target.value)}
+                  placeholder="Difite o título do assunto"
+                  className="input outline-none
+         bg-[#1a1a1a] mt-2 p-2 text-xs "
+                  type="text"
+                />
+              </div>
+            )}
           </div>
-
+          {/*FIM ANEXO PDF */}
           <p className="text-xs mt-8">Selecione a difuldade</p>
           <select
             value={nivel}
@@ -378,16 +448,29 @@ export default function Enviar() {
             </option>
           </select>
           <div className="flex items-center justify-center m-auto mt-4">
-            <button
-              type="submit"
-              className="bg-gradient-to-tl to-orange-600
+            {mostrarPdf ? (
+              <button
+                type="submit"
+                className="bg-gradient-to-tl to-orange-600
              via-purple-400 from-purple-800 p-2
               cursor-pointer font-bold text-white
                bg-animate
               rounded-2xl px-8 hover:scale-105 duration-300 transform "
-            >
-              Enviar
-            </button>
+              >
+                Enviar PDF
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="bg-gradient-to-tl to-orange-600
+             via-purple-400 from-purple-800 p-2
+              cursor-pointer font-bold text-white
+               bg-animate
+              rounded-2xl px-8 hover:scale-105 duration-300 transform "
+              >
+                Enviar TXT
+              </button>
+            )}
           </div>
         </form>
       </section>
